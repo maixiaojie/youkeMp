@@ -15,6 +15,9 @@ const api = {
     card: baseUrl + '/card/add',
     myCardList: baseUrl + '/card/list',
     cardList: baseUrl + '/card/lists',
+    taskAdd: baseUrl + '/task/add',
+    taskList: baseUrl + '/task/list',
+    taskDelete: baseUrl + '/task/delete'
     
 }
 

@@ -2,20 +2,20 @@
   <div class="tasks">
     <van-notify id="custom-selector"/>
     <van-notify id="van-notify"/>
-    <van-tabs type="card" sticky swipeable animated color="#2db7f5">
+    <van-tabs type="card" sticky swipeable animated color="#2db7f5" @change="taskTabChange">
       <van-tab title="我的任务">
-        <i-card
-          v-for="item in taskList"
-          extra="额外内容"
-          :key="item.taskId"
-          :title="item.title"
-          :full="true"
-        >
-          <view slot="content">{{item.content}}</view>
-          <view slot="footer">
+        <view class="task-row van-hairline--bottom"  v-for="item in taskList" :key="item.id">
+          <view class="task-icon">
+            <image :src="item.icon" />
+          </view>
+          <view class="task-info">
+            <view class="task-title">{{item.title}}</view>
+            <view class="task-content">{{item.content}}</view>
+          </view>
+          <view class="task-btn">
             <van-button plain hairline type="danger" size="mini" @click="deleteOne(item)">删除</van-button>
           </view>
-        </i-card>
+        </view>
         <view class="nodata" v-show="nodata">没有任务了，请去添加任务</view>
       </van-tab>
       <van-tab title="添加任务">
@@ -99,50 +99,7 @@ export default {
           selected: true,
         }]
       },
-      taskList: [
-        {
-          taskId: 1,
-          title: "跑步30分钟",
-          content: "每天要坚持..",
-          isFinished: false,
-          icon: "/static/task/task_4.png"
-        },
-        {
-          taskId: 2,
-          title: "喝水8L",
-          content: "每天要坚持..",
-          isFinished: false,
-          icon: "/static/task/task_4.png"
-        },
-        {
-          taskId: 3,
-          title: "拒绝夜宵，拒绝加餐",
-          content: "每天要坚持..",
-          isFinished: false,
-          icon: "/static/task/task_4.png"
-        },
-        {
-          taskId: 4,
-          title: "散步半小时以上",
-          content: "每天要坚持..",
-          isFinished: false,
-          icon: "/static/task/task_4.png"
-        },
-        {
-          taskId: 5,
-          title: "学习英语半个小时",
-          content: "每天要坚持..",
-          isFinished: false,
-          icon: "/static/task/task_4.png"
-        },
-        {
-          taskId: 6,
-          title: "看书一个小时",
-          content: "每天要坚持..",
-          isFinished: false,
-          icon: "/static/task/task_4.png"
-        }
-      ]
+      taskList: []
     };
   },
   components: {
@@ -150,7 +107,6 @@ export default {
   },
   watch: {
     "taskList.length"(val) {
-      console.log(val);
       if (val == 0) {
         this.nodata = true;
       } else {
@@ -160,14 +116,22 @@ export default {
   },
   computed: {},
   methods: {
-    deleteOne(item) {
-      this.taskList = this.taskList.filter(e => e.taskId != item.taskId);
-      Notify({
-        text: "任务 " + item.taskId + " 删除成功",
-        duration: 1000,
-        selector: "#custom-selector",
-        backgroundColor: "#1989fa"
-      });
+    async deleteOne(item) {
+      let uid = wx.getStorageSync("userid");
+      let tid = item.id;
+      let data = await this.$net.get(`${this.$api.taskDelete}?uid=${uid}&tid=${tid}`, {});
+      if(data && data.code == 1) {
+        this.taskList = this.taskList.filter(e => e.id != item.id);
+        Notify({
+          text: "任务 " + item.title + " 删除成功",
+          duration: 1000,
+          selector: "#custom-selector",
+          backgroundColor: "#1989fa"
+        });
+      }else {
+        Notify('删除失败')
+      }
+      
     },
     onChangeTitle(e) {
       this.task.title = e.mp.detail;
@@ -175,7 +139,21 @@ export default {
     onChangeContent(e) {
       this.task.content = e.mp.detail;
     },
-    saveData() {
+    taskTabChange(e) {
+      var index = e.mp.detail.index;
+      if(index == 0) {
+        this.getData();
+      }
+    },
+    async getData() {
+      let uid = wx.getStorageSync("userid");
+      let data = await this.$net.get(`${this.$api.taskList}?uid=${uid}`, {});
+      if(data && data.code == 1) {
+        this.taskList = data.data;
+      }
+    },
+    async saveData() {
+      let uid = wx.getStorageSync("userid");
       if(this.task.title == '') {
         Notify('任务主题不能为空哦')
         return false;
@@ -183,7 +161,20 @@ export default {
         Notify('任务描述不能为空哦')
         return false;
       }
-      console.log(this.task)
+      this.task.uid = uid;
+      let data = await this.$net.post(this.$api.taskAdd, this.task);
+      if(data && data.code == 1) {
+        Notify({
+          text: "任务创建成功",
+          duration: 1000,
+          selector: "#custom-selector",
+          backgroundColor: "#1989fa"
+        });
+        this.task.title = '';
+        this.task.content = '';
+      }else {
+        Notify('创建失败，请重试')
+      }
     },
     toggleIcon(item) {
       this.task.icon = item.src;
@@ -204,7 +195,9 @@ export default {
       }
     }
   },
-  mounted() {},
+  mounted() {
+    this.getData();
+  },
   created() {}
 };
 </script>
@@ -238,5 +231,35 @@ export default {
   border:1px solid #f44;
   box-sizing:border-box;
   border-radius: 5px;
+}
+.tasks .task-row {
+  display: flex;
+  padding:30rpx 0;
+  justify-items: center;
+}
+.tasks .task-row .task-icon {
+  width: 80rpx;
+}
+.tasks .task-row .task-icon image {
+  width: 70rpx;
+  height: 70rpx;
+  max-width: 100%;
+}
+.tasks .task-row .task-btn {
+
+}
+.tasks .task-row .task-info {
+  flex: 1;
+  padding: 0 20rpx;
+}
+.tasks .task-row .task-info .task-title {
+  font-size: 32rpx;
+  color:#333;
+  font-weight: 600;
+}
+.tasks .task-row .task-info .task-content {
+  font-size: 26rpx;
+  padding-top: 10rpx;
+  color:#333;
 }
 </style>
