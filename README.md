@@ -1,3 +1,5 @@
+<p align="center"><a href="https://qq.mcust.cn/#/" target="_blank" rel="noopener noreferrer"><img width="100" src="https://cdn.nlark.com/yuque/0/2019/png/238895/1559096915156-assets/web-upload/14a568c5-8ee3-4544-a59f-62384640adf8.png?x-oss-process=image/resize,w_275" alt="youkeMP logo"></a></p>
+
 # 悠客社区小程序
 
 > A Mpvue project
