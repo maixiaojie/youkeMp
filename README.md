@@ -16,7 +16,7 @@
         <img width="300" src="https://cdn.nlark.com/yuque/0/2019/png/238895/1560419845775-a1f68c67-d3a2-4914-9f85-95b40ee75fb4.png?x-oss-process=image/resize,w_580" />
       </td>
       <td align="center" valign="middle">
-        <img width="300" src"https://cdn.nlark.com/yuque/0/2019/png/238895/1560419826856-31e8ae92-bce8-4c33-9676-e9b1abe261cb.png?x-oss-process=image/resize,w_566" />
+        <img width="300" src="https://cdn.nlark.com/yuque/0/2019/png/238895/1560419826856-31e8ae92-bce8-4c33-9676-e9b1abe261cb.png?x-oss-process=image/resize,w_566" />
       </td>
     </tr>
   </tbody>
