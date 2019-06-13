@@ -1,0 +1,14 @@
+{
+    "usingComponents": {
+        "van-search": "../../../static/vant/search/index",
+        "van-row": "../../../static/vant/row/index",
+        "van-col": "../../../static/vant/col/index",
+        "van-panel": "../../../static/vant/panel/index",
+        "van-tag": "../../../static/vant/tag/index",
+        "i-icon": "../../../static/iview/icon/index",
+        "van-button": "../../../static/vant/button/index",
+        "van-tab": "../../../static/vant/tab/index",
+        "van-tabs": "../../../static/vant/tabs/index"
+    },
+    "navigationBarTitleText": "搜索"
+}

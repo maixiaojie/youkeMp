@@ -1,0 +1,11 @@
+{
+    "usingComponents": {
+        "i-icon": "../../../static/iview/icon/index",
+        "van-tab": "../../../static/vant/tab/index",
+        "van-tabs": "../../../static/vant/tabs/index"
+    },
+    "navigationBarTitleText": "文章",
+    "enablePullDownRefresh": true,
+    "navigationStyle": "custom"
+    
+}

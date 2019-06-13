@@ -1,0 +1,12 @@
+{
+    "usingComponents": {
+        "van-tab": "../../../static/vant/tab/index",
+        "van-tabs": "../../../static/vant/tabs/index",
+        "van-field": "../../../static/vant/field/index",
+        "i-cell-group": "../../../static/iview/cell-group/index",
+        "i-cell": "../../../static/iview/cell/index",
+        "i-rate": "../../../static/iview/rate/index",
+        "i-icon": "../../../static/iview/icon/index"
+    },
+    "navigationBarTitleText": "视频详情"
+}

@@ -1,0 +1,17 @@
+{
+    "usingComponents": {
+        "i-cell-group": "../../../static/iview/cell-group/index",
+        "i-cell": "../../../static/iview/cell/index",
+        "i-button": "../../../static/iview/button/index",
+        "i-icon": "../../../static/iview/icon/index",
+        "van-tab": "../../../static/vant/tab/index",
+        "van-tabs": "../../../static/vant/tabs/index",
+        "i-card": "../../../static/vant/card/index",
+        "van-button": "../../../static/vant/button/index",
+        "van-notify": "../../../static/vant/notify/index",
+        "van-field": "../../../static/vant/field/index",
+        "van-row": "../../../static/vant/row/index",
+        "van-col": "../../../static/vant/col/index"
+    },
+    "navigationBarTitleText": "我的任务"
+}

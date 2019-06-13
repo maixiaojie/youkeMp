@@ -1,0 +1,7 @@
+{
+    "usingComponents": {
+        "van-search": "../../../static/vant/search/index"
+    },
+    "navigationBarTitleText": "视频",
+    "enablePullDownRefresh": true
+}

@@ -1,0 +1,55 @@
+{
+  "pages": [
+    "pages/index/main",
+    "pages/video/main",
+    "pages/article/main",
+    "pages/article_detail/main",
+    "pages/my/main",
+    "pages/my_collection/main",
+    "pages/my_praise/main",
+    "pages/my_look/main",
+    "pages/login/main",
+    "pages/search/main",
+    "pages/video_detail/main",
+    "pages/video_list/main",
+    "pages/my_task/main",
+    "pages/card/main",
+    "pages/my_card/main",
+    "pages/card_square/main"
+  ],
+  "window": {
+    "backgroundTextStyle": "dark",    
+    "backgroundColor": "#fff",
+    "navigationBarBackgroundColor": "#fff",
+    "navigationBarTitleText": "悠客",
+    "navigationBarTextStyle": "black"
+  },
+  "tabBar": {
+    "color": "#bfbfbf",
+    "selectedColor": "#1296db",
+    "backgroundColor": "#fff",
+    "list": [{
+      "pagePath": "pages/index/main",
+      "text": "首页",
+      "iconPath": "/static/tabs/home.png",
+      "selectedIconPath": "/static/tabs/home-active.png"
+
+    }, {
+      "pagePath": "pages/video_list/main",
+      "text": "视频",
+      "iconPath": "/static/tabs/video.png",
+      "selectedIconPath": "/static/tabs/video-active.png"
+    },{
+      "pagePath": "pages/article/main",
+      "text": "文章",
+      "iconPath": "/static/tabs/article.png",
+      "selectedIconPath": "/static/tabs/article-active.png"
+
+    }, {
+      "pagePath": "pages/my/main",
+      "text": "我的",
+      "iconPath": "/static/tabs/my.png",
+      "selectedIconPath": "/static/tabs/my-active.png"
+    }]
+  }
+}
