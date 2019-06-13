@@ -1,10 +1,12 @@
 <p align="center"><a href="https://qq.mcust.cn/#/" target="_blank" rel="noopener noreferrer"><img width="100" src="https://cdn.nlark.com/yuque/0/2019/png/238895/1559096915156-assets/web-upload/14a568c5-8ee3-4544-a59f-62384640adf8.png?x-oss-process=image/resize,w_275" alt="youkeMP logo"></a></p>
 
-# 悠客社区小程序
+<h2 align="center">悠客社区小程序</h2>
 
-> A Mpvue project
+“悠客社区”小程序，非营利性资源共享交流平台，利用优质的学习资源帮助开发者和在校大学生，现有优质视频8000+个，优质文章10000+篇。
 
-## Build Setup
+<p align="center"><img width="300" src="https://cdn.nlark.com/yuque/0/2019/jpeg/238895/1557738487961-f65be9ef-fe4b-4144-9bb2-3d5b4c094692.jpeg?x-oss-process=image/resize,w_550" alt="youkeMP"></p>
+
+### Build Setup
 
 ``` bash
 # 初始化项目
