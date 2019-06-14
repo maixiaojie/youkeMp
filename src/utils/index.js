@@ -1,8 +1,5 @@
-import moment from 'moment'
-
-moment.locale('zh-cn')
 export function calendar(str) {
-  return moment(str).utcOffset(+8).calendar();
+  return str;
 }
 export function formatTime (date) {
   const year = date.getFullYear()

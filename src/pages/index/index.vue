@@ -106,13 +106,13 @@
       </view>
     </view>
     <view class="task-list">
-      <view v-for="(item, index) in taskList" :key="item.taskId" style="margin-top: 20rpx;">
-        <view v-if="!item.isFinished"> 
-          <uniSwipeAction :options="options" :datas="item" @click="finish(index)">
+      <view v-for="(item, index) in taskList" :key="item.id" style="margin-top: 20rpx;">
+        <view v-if="!item.completed"> 
+          <uniSwipeAction :options="options" :datas="item" @click="finish(index, item)">
         </uniSwipeAction>
         </view>
         
-        <view class="row" v-if="item.isFinished">
+        <view class="row" v-if="item.completed">
           <view class="left">
             <image :src="item.icon"></image>
           </view>
@@ -157,50 +157,7 @@ export default {
       carded: false,
       cardNumber: 400,
       seriesCardNumber: 300,
-      taskList: [
-        {
-          taskId: 1,
-          title: "跑步30分钟",
-          content: "每天要坚持..",
-          isFinished: false,
-          icon: "/static/task/task_1.png"
-        },
-        {
-          taskId: 2,
-          title: "喝水8L",
-          content: "每天要坚持..",
-          isFinished: false,
-          icon: "/static/task/task_5.png"
-        },
-        {
-          taskId: 3,
-          title: "拒绝夜宵，拒绝加餐",
-          content: "每天要坚持..",
-          isFinished: false,
-          icon: "/static/task/task_6.png"
-        },
-        {
-          taskId: 4,
-          title: "散步半小时以上",
-          content: "每天要坚持..",
-          isFinished: false,
-          icon: "/static/task/task_7.png"
-        },
-        {
-          taskId: 5,
-          title: "学习英语半个小时",
-          content: "每天要坚持..",
-          isFinished: false,
-          icon: "/static/task/task_8.png"
-        },
-        {
-          taskId: 6,
-          title: "看书一个小时",
-          content: "每天要坚持..",
-          isFinished: false,
-          icon: "/static/task/task_4.png"
-        }
-      ]
+      taskList: []
     };
   },
   components: {
@@ -220,7 +177,7 @@ export default {
     },
     finishedTaskNumber() {
       return this.taskList.filter(item => {
-        return item.isFinished == true;
+        return item.completed == 1;
       }).length;
     },
     processWidth() {
@@ -233,11 +190,18 @@ export default {
           url: "/pages/card_square/main"
         });
     },
-    finish(index) {
+    async finish(index, item) {
+      let userid = wx.getStorageSync("userid");
+      let taskid = item.id;
       var row = this.taskList[index];
       setInterval(function() {
-        row.isFinished = true;
+        row.completed = 1;
       }, 350);
+      let res = await this.$net.get(this.$api.taskComplete+'?uid='+userid+'&tid='+taskid, {});
+      if(res && res.code == 1) {
+        console.log('任务完成')
+      }
+      
     },
     bannerClick(item) {
       let userid = wx.getStorageSync("userid");
@@ -257,7 +221,13 @@ export default {
       let userid = wx.getStorageSync("userid");
       if(userid !== '') {
         let status = await this.$net.get(this.$api.cardStatus+'?uid='+userid, {});
-        console.log(status)
+        let todoData = await this.$net.get(this.$api.taskTodo+'?uid='+userid, {});
+        if(todoData && todoData.code == 1) {
+          let tasklist = todoData.data;
+          if(tasklist.length !== 0) {
+            this.taskList = tasklist;
+          }
+        }
         if(status && status.code == 1 && status.data == null) {
           // 未打卡
           globalStore.commit('setTodayNoCards');
@@ -266,17 +236,6 @@ export default {
           globalStore.commit('setTodayHasCards');
         }
       }
-      // let list = await this.$net.get(this.$api.hotVideo, {});
-      // let course = list.data;
-      // this.hotCourseList = course;
-      // this.commendCourseList = course.concat().reverse();
-
-      // let article = await this.$net.get(
-      //   `${this.$api.articleList}1/5?type=web`,
-      //   {}
-      // );
-      // console.log(article);
-      // this.hotArticleList = article.data;
     },
     toVideoDetail(id) {
       wx.navigateTo({
