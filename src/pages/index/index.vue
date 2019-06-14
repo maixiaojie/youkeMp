@@ -23,13 +23,13 @@
       </i-grid-item>
       <i-grid-item>
       <i-grid-icon>
-              <image src="/static/images/匿名吐槽.png" />
+              <image src="/static/images/tucao.png" />
           </i-grid-icon>
           <i-grid-label>匿名吐槽</i-grid-label>
       </i-grid-item>
       <i-grid-item>
       <i-grid-icon>
-              <image src="/static/images/日报.png" />
+              <image src="/static/images/ribao.png" />
           </i-grid-icon>
           <i-grid-label>悠客日报</i-grid-label>
       </i-grid-item>      
@@ -37,19 +37,19 @@
     <i-grid>
       <i-grid-item>
         <i-grid-icon>
-              <image src="/static/images/专栏.png" />
+              <image src="/static/images/zl.png" />
           </i-grid-icon>
           <i-grid-label>大佬专栏</i-grid-label>
       </i-grid-item>
       <i-grid-item>
       <i-grid-icon>
-              <image src="/static/images/我想聊聊.png" />
+              <image src="/static/images/chat.png" />
           </i-grid-icon>
           <i-grid-label>我想聊聊</i-grid-label>
       </i-grid-item>
       <i-grid-item>
       <i-grid-icon>
-              <image src="/static/images/优惠券.png" />
+              <image src="/static/images/youhui.png" />
           </i-grid-icon>
           <i-grid-label>优惠券</i-grid-label>
       </i-grid-item>      
