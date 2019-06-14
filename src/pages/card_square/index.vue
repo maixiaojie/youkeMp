@@ -78,7 +78,7 @@ export default {
       if(data && data.code == 1) {
         let list = data.data
         list = list.map(function(item) {
-          item.ctime = common.calendar(item.ctime);
+          item.ctime = new Date(item.ctime).toLocaleString();
           return item;
         })
         if(list.length == 0) {
