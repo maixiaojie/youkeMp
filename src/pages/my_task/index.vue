@@ -150,6 +150,11 @@ export default {
       let data = await this.$net.get(`${this.$api.taskList}?uid=${uid}`, {});
       if(data && data.code == 1) {
         this.taskList = data.data;
+        if(this.taskList.length == 0) {
+          this.nodata = true;
+        }else {
+          this.nodata = false;
+        }
       }
     },
     async saveData() {

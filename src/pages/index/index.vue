@@ -55,43 +55,6 @@
       </i-grid-item>      
     </i-grid>
 
-    <!-- <van-panel title="悠客日报">
-        <p class="daily-title">[2019-2-30] 20190230技术日报总结 </p>
-    </van-panel>-->
-    <!-- <van-panel title="热门视频">
-        <p class="video-card" v-for="(item,index) in hotCourseList" @click="toVideoDetail(item.id)" :key="item.id">
-            <CourseItem :txt="item.course_name" :path="item.img" :time="item.learning_time" />
-        </p>
-    </van-panel>-->
-    <!-- <h1 class="pan-header">热门视频</h1>
-    <scroll-view scroll-x="true" style="white-space:nowrap; width:100%">
-      <p
-        class="video-card"
-        :style="{width: (windowWidth - 50) + 'px', height: '100px'}"
-        v-for="(item,index) in hotCourseList"
-        @click="toVideoDetail(item.id)"
-        :key="item.id"
-      >
-        <CourseItem :txt="item.course_name" :path="item.img" :time="item.learning_time"/>
-      </p>
-    </scroll-view>
-    <h1 class="pan-header">推荐视频</h1>
-    <scroll-view scroll-x="true" style="white-space:nowrap; width:100%">
-      <p
-        class="video-card"
-        :style="{width: (windowWidth - 50) + 'px', height: '100px'}"
-        v-for="(item,index) in commendCourseList"
-        @click="toVideoDetail(item.id)"
-        :key="item.id"
-      >
-        <CourseItem :txt="item.course_name" :path="item.img" :time="item.learning_time"/>
-      </p>
-    </scroll-view>
-    <van-panel title="热门文章">
-      <p v-for="item in hotArticleList" class="daily-title" :key="item.id">
-        <ArticleItem :txt="item.title"/>
-      </p>
-    </van-panel> -->
     <view class="task">
       <view class="left">
         <image src="/static/task/task_title.png"></image>
@@ -105,7 +68,10 @@
         <view v-if="!todayHasCarded" @click="toCardPage">签到</view>
       </view>
     </view>
+    
     <view class="task-list">
+      <view v-show="noData" class="no-data">您还没有任务数据哦，去“我的”-“我的任务”中添加。</view>
+      <view v-show="noLogin" class="no-login">您还没有登录哦，登录后可以管理您的每日任务。</view>
       <view v-for="(item, index) in taskList" :key="item.id" style="margin-top: 20rpx;">
         <view v-if="!item.completed"> 
           <uniSwipeAction :options="options" :datas="item" @click="finish(index, item)">
@@ -149,6 +115,8 @@ export default {
       commendCourseList: [],
       hotArticleList: [],
       windowWidth: 0,
+      noData: false,
+      noLogin: true,
       options: [
         {
           text: "完成任务"
@@ -218,16 +186,11 @@ export default {
       }
     },
     async getData() {
+      this.taskList = [];
       let userid = wx.getStorageSync("userid");
       if(userid !== '') {
+        this.noLogin = false;
         let status = await this.$net.get(this.$api.cardStatus+'?uid='+userid, {});
-        let todoData = await this.$net.get(this.$api.taskTodo+'?uid='+userid, {});
-        if(todoData && todoData.code == 1) {
-          let tasklist = todoData.data;
-          if(tasklist.length !== 0) {
-            this.taskList = tasklist;
-          }
-        }
         if(status && status.code == 1 && status.data == null) {
           // 未打卡
           globalStore.commit('setTodayNoCards');
@@ -235,6 +198,22 @@ export default {
           // 今已打卡
           globalStore.commit('setTodayHasCards');
         }
+        let todoData = await this.$net.get(this.$api.taskTodo+'?uid='+userid, {});
+        if(todoData && todoData.code == 1) {
+          let tasklist = todoData.data;
+          if(tasklist.length !== 0) {
+            this.taskList = tasklist;
+            this.noData = false;
+          }
+        }else {
+          this.noData = true;
+        }
+        
+      }else {
+        // 未登录
+        this.noData = false;
+        this.noLogin = true;
+        globalStore.commit('setTodayNoCards');
       }
     },
     toVideoDetail(id) {
@@ -257,7 +236,7 @@ export default {
       
     }
   },
-  mounted() {
+  onShow() {
     this.getData();
     this.windowWidth = globalStore.state.windowWidth;
   },
@@ -347,7 +326,12 @@ export default {
   background: #f4f3f8;
   padding: 20rpx 20rpx 20rpx 20rpx;
 }
-
+.task-list .no-data, .task-list .no-login {
+  font-size: 24rpx;
+  padding: 30rpx 0;
+  text-align: center;
+  color: #333;
+}
 .task-list .row {
   display: flex;
   flex-direction: row;

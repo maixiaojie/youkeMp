@@ -9,27 +9,27 @@
         <p>未登录</p>
       </div>
       <i-cell-group>
-        <i-cell title="签到记录" is-link url="/pages/my_card/main">
+        <i-cell title="签到记录" is-link @click="toPage('/pages/my_card/main')">
           <i-icon slot="icon" type="message" size="20" color="#80848f" />
         </i-cell>
-        <i-cell title="我的任务" is-link url="/pages/my_task/main">
+        <i-cell title="我的任务" is-link @click="toPage('/pages/my_task/main')">
           <i-icon slot="icon" type="message" size="20" color="#80848f" />
         </i-cell>
-        <i-cell title="我收藏的" is-link url="/pages/my_collection/main">
+        <i-cell title="我收藏的" is-link @click="toPage('/pages/my_collection/main')" >
           <i-icon slot="icon" type="collection_fill" size="20" color="#80848f" />
         </i-cell>
-        <i-cell title="我点赞的" is-link url="/pages/my_praise/main">
+        <i-cell title="我点赞的" is-link @click="toPage('/pages/my_praise/main')">
           <i-icon slot="icon" type="praise_fill" size="20" color="#80848f" />
         </i-cell>
-        <i-cell title="我看过的" is-link url="/pages/my_look/main">
+        <i-cell title="我看过的" is-link @click="toPage('/pages/my_look/main')">
           <i-icon slot="icon" type="activity" size="20" color="#80848f" />
-        </i-cell>
-        <i-cell title="客服">
-          <i-icon slot="icon" type="activity" size="20" color="#80848f" />
-          <i-button slot="footer" inline type="Ghost" size="small" open-type="contact">客服</i-button>
         </i-cell>
       </i-cell-group>
-
+      
+      <div class="btn-row van-hairline--top">
+          <i-button slot="footer" inline type="Ghost" size="small" open-type="contact">客服</i-button>
+          <i-button slot="footer" inline type="Ghost" size="small" open-type="feedback">问题反馈</i-button>
+      </div>
       
 
       <div v-show="!isLogin">
@@ -47,12 +47,25 @@ export default {
   data() {
     return {
       isLogin: false,
+      isLink: false,
       userInfo: {}
     }
   },
   computed: {
   },
   methods: {
+    toPage(url) {
+      if(this.isLogin) {
+        wx.navigateTo({
+          url
+        });
+      }else {
+        wx.showToast({
+          title: '请先登录',
+          icon: 'none'
+        });
+      }
+    },
     logout() {
       wx.setStorageSync("isLogin", false);
       wx.setStorageSync("userInfo", {});
@@ -167,5 +180,8 @@ export default {
   padding-bottom: 15rpx;
   text-align: center;
   color: rgba(255, 255, 255, 0.8);
+}
+.person .btn-row {
+  background: #fff;
 }
 </style>

@@ -105,7 +105,7 @@ export default {
       this.endMove();
     }
   },
-  mounted() {
+  onLoad() {
     // this.direction = ''
     // this.startX = 0
     // this.startY = 0
@@ -115,14 +115,19 @@ export default {
     this.getSize();
   },
   onCreated() {
-    // this.query = wx.createSelectorQuery();
   },
   methods: {
     getSize() {
-      // wx.createSelectorQuery().select(`#${this.elId}`).boundingClientRect().exec((ret) => {
-      // 	console.log(ret)
-      // 	this.btnGroupWidth = ret[0].width
-      // })
+      const query = wx.createSelectorQuery();
+      var elid = '#'+ this.elId;
+      var that = this;
+      setTimeout(function() {
+        query.select(elid).boundingClientRect()
+        query.exec((ret) => {
+          that.btnGroupWidth = ret[0].width
+        })
+      }, 100)
+      
       if (this.isOpened) {
         this.isShowBtn = true;
         this.endMove();
