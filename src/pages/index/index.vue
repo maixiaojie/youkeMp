@@ -21,39 +21,50 @@
           </i-grid-icon>
           <i-grid-label>签到广场</i-grid-label>
       </i-grid-item>
-      <i-grid-item>
-      <i-grid-icon>
+      <!-- <i-grid-item>
+        <i-grid-icon>
               <image src="/static/images/tucao.png" />
           </i-grid-icon>
           <i-grid-label>匿名吐槽</i-grid-label>
-      </i-grid-item>
-      <i-grid-item>
-      <i-grid-icon>
-              <image src="/static/images/ribao.png" />
-          </i-grid-icon>
-          <i-grid-label>悠客日报</i-grid-label>
-      </i-grid-item>      
-    </i-grid>
-    <i-grid>
-      <i-grid-item>
+      </i-grid-item> -->
+      <i-grid-item @click="toZL">
         <i-grid-icon>
               <image src="/static/images/zl.png" />
           </i-grid-icon>
           <i-grid-label>大佬专栏</i-grid-label>
       </i-grid-item>
+      <i-grid-item @click="toZL">
+        <i-grid-icon>
+            <image src="/static/images/ribao.png" />
+          </i-grid-icon>
+          <i-grid-label>悠客日报</i-grid-label>
+      </i-grid-item>      
+    </i-grid>
+    <!-- <i-grid>
+      
       <i-grid-item>
-      <i-grid-icon>
+        <i-grid-icon>
               <image src="/static/images/chat.png" />
           </i-grid-icon>
           <i-grid-label>我想聊聊</i-grid-label>
       </i-grid-item>
       <i-grid-item>
-      <i-grid-icon>
+        <i-grid-icon>
+          </i-grid-icon>
+          <i-grid-label> &nbsp;</i-grid-label>
+      </i-grid-item> 
+      <i-grid-item>
+        <i-grid-icon>
+          </i-grid-icon>
+          <i-grid-label> &nbsp;</i-grid-label>
+      </i-grid-item>   
+      <i-grid-item>
+        <i-grid-icon>
               <image src="/static/images/youhui.png" />
           </i-grid-icon>
           <i-grid-label>优惠券</i-grid-label>
       </i-grid-item>      
-    </i-grid>
+    </i-grid> -->
 
     <view class="task">
       <view class="left">
@@ -156,6 +167,12 @@ export default {
     toCardSquare() {
         wx.navigateTo({
           url: "/pages/card_square/main"
+        });
+    },
+    toZL() {
+        wx.showToast({
+          title: "该功能需要联系管理员进行授权",
+          icon: "none"
         });
     },
     async finish(index, item) {
