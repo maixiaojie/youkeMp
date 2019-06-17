@@ -33,21 +33,22 @@
           </i-grid-icon>
           <i-grid-label>大佬专栏</i-grid-label>
       </i-grid-item>
+        
+      <i-grid-item @click="toChat">
+        <i-grid-icon>
+              <image src="/static/images/chat.png" />
+          </i-grid-icon>
+          <i-grid-label>我想聊聊</i-grid-label>
+      </i-grid-item>   
+    </i-grid>
+    <!-- <i-grid>
+      
       <i-grid-item @click="toZL">
         <i-grid-icon>
             <image src="/static/images/ribao.png" />
           </i-grid-icon>
           <i-grid-label>悠客日报</i-grid-label>
-      </i-grid-item>      
-    </i-grid>
-    <!-- <i-grid>
-      
-      <i-grid-item>
-        <i-grid-icon>
-              <image src="/static/images/chat.png" />
-          </i-grid-icon>
-          <i-grid-label>我想聊聊</i-grid-label>
-      </i-grid-item>
+      </i-grid-item> 
       <i-grid-item>
         <i-grid-icon>
           </i-grid-icon>
@@ -167,6 +168,11 @@ export default {
     toCardSquare() {
         wx.navigateTo({
           url: "/pages/card_square/main"
+        });
+    },
+    toChat() {
+        wx.navigateTo({
+          url: "/pages/chatroom/main"
         });
     },
     toZL() {

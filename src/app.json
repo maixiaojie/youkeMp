@@ -15,7 +15,8 @@
     "pages/my_task/main",
     "pages/card/main",
     "pages/my_card/main",
-    "pages/card_square/main"
+    "pages/card_square/main",
+    "pages/chatroom/main"
   ],
   "window": {
     "backgroundTextStyle": "dark",    
