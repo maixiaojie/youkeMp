@@ -1,5 +1,6 @@
 <template>
   <div class="chatroom" >
+    <van-notify id="custom-selector"/>
     <div class="online">
       <div class="icon-list" >
           <image v-for="item in iconList" :key="item" :src="item"></image>
@@ -37,22 +38,17 @@
 <script>
 import globalStore from "../../store/globalStore";
 import common from '../../utils/index';
-import IO from 'socket.io-mp-client'
+import IO from 'socket.io-mp-client';
+import Notify from "../../../static/vant/notify/notify";
 let socketIO = null;
+let socket = null;
 export default {
   data() {
     return {
       value: '',
       totalNumber: '',  
       scrollTop: 0,
-      iconList: [
-        'https://wx.qlogo.cn/mmopen/vi_32/3RN2u2ibTcKuTfXV25iacOUAZUd5oicgEbgcrFEfPRvoAs0QCWpeHewiar2PhwPnib86skZEnJqFrNZOMRI9qI6gYQA/132',
-        'https://wx.qlogo.cn/mmopen/vi_32/s2RzxMKd4Dpx9HXia06XOpG6BMBgaia4VsqlB81kJShdT5VSg6aTxiboOmZkVdJMq3vKkJYZiaqqmBMLBd2BHwljzQ/132',
-        'https://wx.qlogo.cn/mmopen/vi_32/DYAIOgq83eoR7KgIadPJLBPy3BHq4ibGGoojkloRSJsB56icLomh2oNd1meN60WsL6QW8gxt5yJ1Um503ibaSNQlA/132',
-        'https://wx.qlogo.cn/mmopen/vi_32/DYAIOgq83ercpe2qSmAI4ERsHgfgFoWgcE7fIVVCTIeWHl9mvnknVua31JPogMS1vumQk8wTo3ltL4YpVicOo1A/132',
-        'https://wx.qlogo.cn/mmopen/vi_32/ibMCdSmwTBqiaY9fIIWsHibkDR7If4kZIh0oaia3tUTHdaPtIE6O2T9q8Jibwn2hzJDb8APBvDXiaBsjWpNCJlPoMLDA/132',
-        'https://wx.qlogo.cn/mmopen/vi_32/0iaGqqJtNGrpssrNkuAmwfvZUSyC80EHhR1NKWK0g53iaQ6yMuUqic2ic81KJaw596DRuHjovqU38FLjBHcUzatdibA/132'
-      ],
+      iconList: [],
       msgList: [{
         id: 1,
         type: 'msg',
@@ -82,6 +78,7 @@ export default {
     };
   },
   components: {
+    Notify
   },
   watch: {
     'msgList.length'() {
@@ -133,12 +130,23 @@ export default {
     }
     
   },
+  
   mounted() {
+    console.log('mounted');
+  },
+  beforeDestroy() {
+    console.log('beforeDestroy');
+  },
+  onShow() {
+    console.log('show');
     var that = this;
     // var socketUrl = 'ws://localhost:7777';
     var socketUrl = 'wss://api.mcust.cn';
-    let socket = IO(socketUrl);
+    socket = IO(socketUrl, {
+      reconnectionDelayMax: 2000
+    });
     socketIO = socket;
+    
     
     socket.on('connect', () => {
       console.log(`socket 连接成功`)
@@ -148,6 +156,12 @@ export default {
         avatar: that.userinfo.avatarUrl
       }
       socket.emit('login', data);
+      Notify({
+          text: "您已成功进入聊天室",
+          duration: 1000,
+          selector: "#custom-selector",
+          backgroundColor: "#1989fa"
+        });
     })
     socket.on('connect_error', d =>{
       console.log(`socket 连接失败`)
@@ -162,6 +176,7 @@ export default {
       console.log(`socket 连接错误`)
     })
     socket.on('msgs', data => {
+      console.log(data);
       that.msgList.push({
         id: Math.random(),
         type: 'msg',
@@ -207,10 +222,13 @@ export default {
       }
     })
   },
-  onShow() {
-    
+  onHide() {
   },
-  created() {},
+  onUnload() {
+    console.log('onUnload');
+    socketIO.close();
+    Object.assign(this, this.$options.data())
+  }
 };
 </script>
 <style>
