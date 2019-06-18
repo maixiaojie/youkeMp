@@ -134,9 +134,9 @@ export default {
     
   },
   mounted() {
-    // var socket = IO('wss://api.mcust.cn/')
     var that = this;
-    var socketUrl = 'ws://localhost:7777';
+    // var socketUrl = 'ws://localhost:7777';
+    var socketUrl = 'wss://api.mcust.cn';
     let socket = IO(socketUrl);
     socketIO = socket;
     
