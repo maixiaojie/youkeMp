@@ -26,6 +26,7 @@
     "moment": "^2.24.0",
     "mpvue": "^2.0.0",
     "mpvue-wxparse": "^0.6.5",
+    "socket.io-mp-client": "^1.1.19",
     "vuex": "^3.0.1"
   },
   "devDependencies": {

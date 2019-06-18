@@ -171,9 +171,17 @@ export default {
         });
     },
     toChat() {
+      let userid = wx.getStorageSync("userid");
+      if(userid == '') {
+        wx.showToast({
+          title: "登录后在进行该操作",
+          icon: "none"
+        });
+      }else {
         wx.navigateTo({
           url: "/pages/chatroom/main"
         });
+      }
     },
     toZL() {
         wx.showToast({

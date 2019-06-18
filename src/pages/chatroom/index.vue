@@ -7,7 +7,7 @@
     </div>
     <div class="main" id="main">
       <scroll-view scroll-y :style="{height: scrollHeight + 'rpx'}" :scroll-top="scrollTop">
-        <div class="row" v-for="item in msgList" :key="item.id" :class="item.uid === uid ? 'self': ''">       
+        <div class="row" v-for="item in msgList" :key="item.id" :class="item.userid === userid ? 'self': ''">       
           <div v-if="item.type === 'notice'" class="notice">
             <text >{{item.msg}} </text>
           </div>
@@ -15,7 +15,7 @@
             <image :src="item.avator"></image>
           </div>
           <div v-if="item.type === 'msg'" class="right">
-            <div class="name" v-if="item.uid !== uid">{{item.name}}</div>
+            <div class="name" v-if="item.userid !== userid">{{item.name}}</div>
             <div class="msg"><text>{{item.msg}}</text></div>
           </div>
         </div>
@@ -37,11 +37,13 @@
 <script>
 import globalStore from "../../store/globalStore";
 import common from '../../utils/index';
+import IO from 'socket.io-mp-client'
 export default {
   data() {
     return {
       value: '',
-      uid: '1',
+      // uid: '1',
+      totalNumber: '',
       scrollTop: 0,
       iconList: [
         'https://wx.qlogo.cn/mmopen/vi_32/3RN2u2ibTcKuTfXV25iacOUAZUd5oicgEbgcrFEfPRvoAs0QCWpeHewiar2PhwPnib86skZEnJqFrNZOMRI9qI6gYQA/132',
@@ -55,21 +57,21 @@ export default {
         id: 1,
         type: 'msg',
         name: '麦晓杰',
-        uid: '2',
+        userid: '2',
         avator: 'https://wx.qlogo.cn/mmopen/vi_32/ibMCdSmwTBqiaY9fIIWsHibkDR7If4kZIh0oaia3tUTHdaPtIE6O2T9q8Jibwn2hzJDb8APBvDXiaBsjWpNCJlPoMLDA/132',
         msg: '哈哈哈，还可以吧？'
       },{
         id: 2,
         type: 'msg',
         name: 'tracy',
-        uid: '3',
+        userid: '3',
         avator: 'https://wx.qlogo.cn/mmopen/vi_32/0iaGqqJtNGrpssrNkuAmwfvZUSyC80EHhR1NKWK0g53iaQ6yMuUqic2ic81KJaw596DRuHjovqU38FLjBHcUzatdibA/132',
         msg: '可以可以 666'
       },{
         id: 3,
         type: 'msg',
         name: 'tracy',
-        uid: '3',
+        userid: '3',
         avator: 'https://wx.qlogo.cn/mmopen/vi_32/0iaGqqJtNGrpssrNkuAmwfvZUSyC80EHhR1NKWK0g53iaQ6yMuUqic2ic81KJaw596DRuHjovqU38FLjBHcUzatdibA/132',
         msg: '哈哈哈'
       },{
@@ -87,6 +89,12 @@ export default {
     }
   },
   computed: {
+    userinfo() {
+      return wx.getStorageSync("userInfo")
+    },
+    userid() {
+      return wx.getStorageSync("userid")
+    },
     windowWidth() {
       return globalStore.state.windowWidth
     },
@@ -119,6 +127,62 @@ export default {
       
     }
     
+  },
+  onLoad() {
+    // var socket = IO('wss://api.mcust.cn/')
+    var that = this;
+    var socket = IO('ws://localhost:7777');
+    socket.on('connect', () => {
+      console.log(`socket 连接成功`)
+      var data = {
+        userid: that.userid,
+        username: that.userinfo.nickName,
+        avatar: that.userinfo.avatarUrl
+      }
+      socket.emit('login', data);
+    })
+    socket.on('connect_error', d =>{
+      console.log(`socket 连接失败`)
+    })
+    socket.on('connect_timeout', d =>{
+      console.log(`socket 连接超时`)
+    })
+    socket.on('disconnect', d =>{
+      console.log(`socket 连接断开`)
+    })
+    socket.on('error', d =>{
+      console.log(`socket 连接错误`)
+    })
+    socket.on('leaveroom', data => {
+      console.log(data)
+      that.totalNumber = data.total;
+      let hasCurrentUser = data.userList.some(item => item.userid === that.userid);
+      console.log(hasCurrentUser)
+      if(data.leaveUser !== null) {
+        that.msgList.push({
+          id: Math.random(),
+          type: 'notice',
+          msg: `${data.leaveUser.username} 离开了房间`
+        })
+      }
+    })
+    socket.on('total', data => {
+      console.log(data)
+      that.totalNumber = data.total;
+      if(data.userList.length === 0) {
+        that.iconList = [that.userinfo.avatarUrl];
+      }else {
+        that.iconList = data.userList.map( item => item.avatar);
+      }
+      
+      if(data.newUser !== null) {
+        that.msgList.push({
+          id: Math.random(),
+          type: 'notice',
+          msg: `欢迎 ${data.newUser.username} 加入`
+        })
+      }
+    })
   },
   onShow() {
     
