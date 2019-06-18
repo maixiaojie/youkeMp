@@ -137,7 +137,7 @@ export default {
   beforeDestroy() {
     console.log('beforeDestroy');
   },
-  onShow() {
+  onLoad() {
     console.log('show');
     var that = this;
     // var socketUrl = 'ws://localhost:7777';
