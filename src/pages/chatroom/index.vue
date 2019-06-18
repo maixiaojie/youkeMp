@@ -38,12 +38,12 @@
 import globalStore from "../../store/globalStore";
 import common from '../../utils/index';
 import IO from 'socket.io-mp-client'
+let socketIO = null;
 export default {
   data() {
     return {
       value: '',
-      // uid: '1',
-      totalNumber: '',
+      totalNumber: '',  
       scrollTop: 0,
       iconList: [
         'https://wx.qlogo.cn/mmopen/vi_32/3RN2u2ibTcKuTfXV25iacOUAZUd5oicgEbgcrFEfPRvoAs0QCWpeHewiar2PhwPnib86skZEnJqFrNZOMRI9qI6gYQA/132',
@@ -107,16 +107,17 @@ export default {
       this.value = e.mp.detail.value;
     },
     sendMsg(msg) {
+      var that = this;
       var data = {
         id: Math.random(),
         type: 'msg',
-        name: 'awalysu',
-        uid: '1',
-        avator: 'https://wx.qlogo.cn/mmopen/vi_32/3RN2u2ibTcKuTfXV25iacOUAZUd5oicgEbgcrFEfPRvoAs0QCWpeHewiar2PhwPnib86skZEnJqFrNZOMRI9qI6gYQA/132',
+        name: that.userinfo.nickName,
+        userid: that.userid,
+        avatar: that.userinfo.avatarUrl,
         msg
       }
-      this.msgList.push(data);
-      this.scrollTop = this.msgList.length * 150; 
+      socketIO.emit('msg', data);
+      that.scrollTop = that.msgList.length * 150; 
     },
     confirm() {
       var msg = this.value;
@@ -124,14 +125,21 @@ export default {
         this.sendMsg(msg);
         this.value = '';
       }
-      
+    },
+    setTitle(total) {
+      wx.setNavigationBarTitle({
+        title: `聊天室(共${total}人)`
+      })
     }
     
   },
-  onLoad() {
+  mounted() {
     // var socket = IO('wss://api.mcust.cn/')
     var that = this;
-    var socket = IO('ws://localhost:7777');
+    var socketUrl = 'ws://localhost:7777';
+    let socket = IO(socketUrl);
+    socketIO = socket;
+    
     socket.on('connect', () => {
       console.log(`socket 连接成功`)
       var data = {
@@ -153,11 +161,25 @@ export default {
     socket.on('error', d =>{
       console.log(`socket 连接错误`)
     })
+    socket.on('msgs', data => {
+      that.msgList.push({
+        id: Math.random(),
+        type: 'msg',
+        msg: data.msg,
+        userid: data.userid,
+        avator: data.avatar
+      })
+    })
     socket.on('leaveroom', data => {
-      console.log(data)
       that.totalNumber = data.total;
+      that.setTitle(that.totalNumber);
       let hasCurrentUser = data.userList.some(item => item.userid === that.userid);
-      console.log(hasCurrentUser)
+      if(hasCurrentUser) {
+        that.iconList = data.userList.map( item => item.avatar);
+      }else {
+        that.iconList = data.userList.map( item => item.avatar);
+        that.iconList.unshift(that.userinfo.avatarUrl)
+      }
       if(data.leaveUser !== null) {
         that.msgList.push({
           id: Math.random(),
@@ -167,14 +189,15 @@ export default {
       }
     })
     socket.on('total', data => {
-      console.log(data)
       that.totalNumber = data.total;
-      if(data.userList.length === 0) {
-        that.iconList = [that.userinfo.avatarUrl];
+      that.setTitle(that.totalNumber);
+      let hasCurrentUser = data.userList.some(item => item.userid === that.userid);
+      if(hasCurrentUser) {
+        that.iconList = data.userList.map( item => item.avatar);
       }else {
         that.iconList = data.userList.map( item => item.avatar);
+        that.iconList.unshift(that.userinfo.avatarUrl)
       }
-      
       if(data.newUser !== null) {
         that.msgList.push({
           id: Math.random(),
