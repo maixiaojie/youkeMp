@@ -90,6 +90,11 @@ export default {
       completed: false
     };
   },
+  computed: {
+    statusBarHeight() {
+      return globalStore.state.statusBarHeight;
+    }
+  },
   components: {
     ArticleItem,
     Item,
@@ -101,7 +106,6 @@ export default {
     
   },
   onLoad() {
-    this.statusBarHeight = globalStore.state.statusBarHeight;
     this.completed = false;
     this.getData();
   },

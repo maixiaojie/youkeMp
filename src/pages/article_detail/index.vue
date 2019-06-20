@@ -129,7 +129,7 @@ export default {
   display: none;
 }
 .article_detail .toback {
-  position: absolute;
+  position: fixed;
   bottom:60rpx;
   right:60rpx;
   padding: 10rpx;
