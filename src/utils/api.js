@@ -19,7 +19,8 @@ const api = {
     taskList: baseUrl + '/task/list',
     taskDelete: baseUrl + '/task/delete',
     taskComplete: baseUrl + '/task/complete',
-    taskTodo: baseUrl + '/task/todo'
+    taskTodo: baseUrl + '/task/todo',
+    chatMsgList: baseUrl + '/chatmsg/list'
     
 }
 

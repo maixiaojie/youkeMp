@@ -13,7 +13,7 @@
             <text >{{item.msg}} </text>
           </div>
           <div v-if="item.type === 'msg'" class="left">
-            <image :src="item.avator"></image>
+            <image :src="item.avatar"></image>
           </div>
           <div v-if="item.type === 'msg'" class="right">
             <div class="name" v-if="item.userid !== userid">{{item.name}}</div>
@@ -49,32 +49,9 @@ export default {
       totalNumber: '',  
       scrollTop: 0,
       iconList: [],
-      msgList: [{
-        id: 1,
-        type: 'msg',
-        name: '麦晓杰',
-        userid: '2',
-        avator: 'https://wx.qlogo.cn/mmopen/vi_32/ibMCdSmwTBqiaY9fIIWsHibkDR7If4kZIh0oaia3tUTHdaPtIE6O2T9q8Jibwn2hzJDb8APBvDXiaBsjWpNCJlPoMLDA/132',
-        msg: '哈哈哈，还可以吧？'
-      },{
-        id: 2,
-        type: 'msg',
-        name: 'tracy',
-        userid: '3',
-        avator: 'https://wx.qlogo.cn/mmopen/vi_32/0iaGqqJtNGrpssrNkuAmwfvZUSyC80EHhR1NKWK0g53iaQ6yMuUqic2ic81KJaw596DRuHjovqU38FLjBHcUzatdibA/132',
-        msg: '可以可以 666'
-      },{
-        id: 3,
-        type: 'msg',
-        name: 'tracy',
-        userid: '3',
-        avator: 'https://wx.qlogo.cn/mmopen/vi_32/0iaGqqJtNGrpssrNkuAmwfvZUSyC80EHhR1NKWK0g53iaQ6yMuUqic2ic81KJaw596DRuHjovqU38FLjBHcUzatdibA/132',
-        msg: '哈哈哈'
-      },{
-        id: 4,
-        type: 'notice',
-        msg: '欢迎 awalysu 加入...'
-      }]
+      pageNum: 1,
+      pageSize: 10,
+      msgList: []
     };
   },
   components: {
@@ -106,7 +83,7 @@ export default {
     sendMsg(msg) {
       var that = this;
       var data = {
-        id: Math.random(),
+        // id: Math.random(),
         type: 'msg',
         name: that.userinfo.nickName,
         userid: that.userid,
@@ -127,6 +104,14 @@ export default {
       wx.setNavigationBarTitle({
         title: `聊天室(共${total}人)`
       })
+    },
+    async getMsgData() {
+      let page = this.pageNum;
+      let size = this.pageSize;
+      let data = await this.$net.get(`${this.$api.chatMsgList}/${page}/${size}`, {});
+      if(data && data.code == 1) {
+        this.msgList = data.data.reverse();
+      }
     }
     
   },
@@ -138,8 +123,9 @@ export default {
     console.log('beforeDestroy');
   },
   onLoad() {
-    console.log('show');
+    console.log('onLoad');
     var that = this;
+    that.getMsgData();
     // var socketUrl = 'ws://localhost:7777';
     var socketUrl = 'wss://api.mcust.cn';
     socket = IO(socketUrl, {
@@ -180,9 +166,10 @@ export default {
       that.msgList.push({
         id: Math.random(),
         type: 'msg',
+        name: data.name,
         msg: data.msg,
         userid: data.userid,
-        avator: data.avatar
+        avatar: data.avatar
       })
     })
     socket.on('leaveroom', data => {
