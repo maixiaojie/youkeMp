@@ -153,6 +153,10 @@ export default {
     this.userInfo = wx.getStorageSync('userInfo')
     console.log(this.isLogin)
   },
+  onUnload() {
+    console.log('onUnload');
+    Object.assign(this, this.$options.data())
+  },
   created() {
     
   }

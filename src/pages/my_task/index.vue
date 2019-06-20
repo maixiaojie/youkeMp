@@ -203,6 +203,10 @@ export default {
   mounted() {
     this.getData();
   },
+  onUnload() {
+    console.log('onUnload');
+    Object.assign(this, this.$options.data())
+  },
   created() {}
 };
 </script>

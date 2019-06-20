@@ -121,6 +121,10 @@ export default {
         let option = util.getQuery();
         this.getData(option);
     },
+    onUnload() {
+        console.log('onUnload');
+        Object.assign(this, this.$options.data())
+    },
     methods: {
         async getData(option) {
             let rs = await this.$net.get(this.$api.corseDetail + option.videoid, {});

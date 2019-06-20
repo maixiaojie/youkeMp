@@ -187,6 +187,10 @@ export default {
         this.statusBarHeight = globalStore.state.statusBarHeight;
         this.completed = false;
     },
+    onUnload() {
+        console.log('onUnload');
+        Object.assign(this, this.$options.data())
+    },
     mounted() {
         let type = 'all'
         let currentData = this.items.filter((item) => {

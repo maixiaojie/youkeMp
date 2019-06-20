@@ -98,11 +98,16 @@ export default {
     Skeletons
   },
   mounted() {
-    this.completed = false;
-    this.getData();
+    
   },
   onLoad() {
     this.statusBarHeight = globalStore.state.statusBarHeight;
+    this.completed = false;
+    this.getData();
+  },
+  onUnload() {
+    console.log('onUnload');
+    Object.assign(this, this.$options.data())
   },
   methods: {
     async getData() {
@@ -125,7 +130,7 @@ export default {
     },
     toDetail(item) {
       console.log(item);
-      wx.navigateTo({
+      wx.redirectTo({
         url: "/pages/article_detail/main?articleid=" + item.id
       });
     },

@@ -79,6 +79,10 @@ export default {
   onLoad() {
     
   },
+  onUnload() {
+    console.log('onUnload');
+    Object.assign(this, this.$options.data())
+  },
   onShow() {
     this.completed = false;
     var date = new Date();

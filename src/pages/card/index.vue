@@ -114,6 +114,10 @@ export default {
     this.card.title = year + '年' + month + '月' + day + '日 签到'
     this.getTotalCardNumber();
   },
+  onUnload() {
+    console.log('onUnload');
+    Object.assign(this, this.$options.data())
+  },
   created() {}
 };
 </script>

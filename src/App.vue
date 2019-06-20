@@ -31,6 +31,10 @@ export default {
       mpvue.setStorageSync('logs', logs)
     }
   },
+  onUnload() {
+    console.log('onUnload');
+    Object.assign(this, this.$options.data())
+  },
   log () {
     console.log(`log at:${Date.now()}`)
   }

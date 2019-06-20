@@ -101,6 +101,10 @@ export default {
     this.completed = false;
     this.getData();
   },
+  onUnload() {
+    console.log('onUnload');
+    Object.assign(this, this.$options.data())
+  },
   created() {},
   async onPullDownRefresh() {
     // to doing..

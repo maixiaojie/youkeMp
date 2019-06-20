@@ -252,6 +252,10 @@ export default {
     this.windowWidth = globalStore.state.windowWidth;
     this.scrollViewHeight = this.windowHeight - this.windowWidth / 750 * (88 * 2) + 50
   },
+  onUnload() {
+    console.log('onUnload');
+    Object.assign(this, this.$options.data())
+  },
   created() {}
 };
 </script>

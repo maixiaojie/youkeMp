@@ -9,7 +9,8 @@
       </div>
       <div class="content">
         <wxParse :content="content" @preview="preview" @navigate="navigate" />
-      </div>  
+      </div>
+      <div class="toback" @click="toback">返回</div>
       <GoTop />      
     </div>
     
@@ -33,6 +34,11 @@ export default {
     GoTop
   },
   methods: {
+    toback() {
+      wx.switchTab({
+        url: "/pages/article/main"
+      })
+    },
     async getData(id) {
       let data = await this.$net.get(`${this.$api.articleDetail}${id}`, {});
       this.content = data.data.content;
@@ -57,8 +63,9 @@ export default {
     this.getData(option.articleid);
   },
   created() {},
-  onLoad() {
-    Object.assign(this.$data, this.$options.data())
+  onUnload() {
+    console.log('onUnload');
+    Object.assign(this, this.$options.data())
   },
   onShareAppMessage: (res) => {
         let title = wx.getStorageSync("article_title");
@@ -120,5 +127,14 @@ export default {
 }
 .article_detail .article-ad-text {
   display: none;
+}
+.article_detail .toback {
+  position: absolute;
+  bottom:60rpx;
+  right:60rpx;
+  padding: 10rpx;
+  font-size: 30rpx;
+  background: #ff1;
+
 }
 </style>

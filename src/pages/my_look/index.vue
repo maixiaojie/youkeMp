@@ -48,6 +48,10 @@ export default {
         })
     },
   },
+  onUnload() {
+    console.log('onUnload');
+    Object.assign(this, this.$options.data())
+  },
   created() {
   }
 };

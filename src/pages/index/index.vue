@@ -271,6 +271,10 @@ export default {
     this.getData();
     this.windowWidth = globalStore.state.windowWidth;
   },
+  onUnload() {
+    console.log('onUnload');
+    Object.assign(this, this.$options.data())
+  },
   created() {
     // let app = getApp()
   },

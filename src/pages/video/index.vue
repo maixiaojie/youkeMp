@@ -105,6 +105,10 @@ export default {
 
         }
     },
+    onUnload() {
+        console.log('onUnload');
+        Object.assign(this, this.$options.data())
+    },
     // 上拉加载
     onReachBottom: function () {
     //执行上拉执行的功能

@@ -20,6 +20,10 @@ export default {
         console.log(e.target.rawData)
     }
   },
+  onUnload() {
+    console.log('onUnload');
+    Object.assign(this, this.$options.data())
+  },
   created() {
   }
 };
